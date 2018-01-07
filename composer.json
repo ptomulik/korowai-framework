@@ -1,6 +1,6 @@
 {
-    "name": "korowai/korowai",
-    "description": "Open Source software for LDAP exploration",
+    "name": "korowai/framework",
+    "description": "Framework for Korowai project",
     "type": "library",
     "license": "MIT",
     "authors": [
