@@ -1,0 +1,11 @@
+# behat.yml
+
+default:
+  autoload:
+    - %paths.base%/src/Korowai/Component/Ldap/Behat/bootstrap
+  suites:
+    ldap:
+      paths:
+        - %paths.base%/src/Korowai/Component/Ldap/Behat
+      contexts:
+        - ExtLdapContext

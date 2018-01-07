@@ -1,0 +1,276 @@
+#!/usr/bin/env php
+<?php
+
+class BootstrapError extends \Exception { }
+
+abstract class AbstractInstaller {
+
+  protected $install_dir;
+  protected $filename;
+  protected $url;
+  protected $sig_url;
+  protected $tmpdir;
+  protected $tmpfile;
+  protected $remove_tmpdir;
+
+  static protected $currentSystem;
+  static protected $currentMachine;
+
+  protected function __construct( $install_dir = null,
+                                  $filename = null,
+                                  $url = null,
+                                  $sig_url = null,
+                                  $tmpdir = null)
+  {
+    if(!isset($install_dir))  { $install_dir = $this->defaultInstallDir(); }
+    if(!isset($filename))     { $filename = $this->defaultFileName(); }
+    if(!isset($url))          { $url = $this->defaultUrl(); }
+    if(!isset($sig_url))      { $sig_url = $this->defaultSigUrl(); }
+    if(!isset($tmpdir))       { $tmpdir = $this->defaultTmpDir(); }
+
+    $this->_init($install_dir, $filename, $url, $sig_url, $tmpdir);
+  }
+
+  abstract protected function defaultFileName();
+  abstract protected function defaultUrl();
+  abstract protected function defaultSigUrl();
+  abstract protected function tmpFileNamePrefix();
+  abstract protected function runInstallCmd();
+
+  protected function defaultInstallDir() { return '.'; }
+  protected function defaultTmpDir() { return 'tmp'; }
+
+  static public function system()
+  {
+    if(!isset(self::$system))   { self::$currentSystem = php_uname('s'); }
+    return self::$currentSystem;
+  }
+
+  static public function machine()
+  {
+    if(!isset(self::$machine))   { self::$currentMachine = php_uname('m'); }
+    return self::$currentMachine;
+  }
+
+  final private function __clone() { }
+  final private function __wakeup() { }
+
+  public function __destruct()
+  {
+    $this->_cleanup();
+  }
+
+  private function _init($install_dir, $filename, $url, $sig_url, $tmpdir)
+  {
+    $this->install_dir = $install_dir;
+    $this->filename = $filename;
+    $this->url = $url;
+    $this->sig_url = $sig_url;
+    $this->tmpdir = $tmpdir;
+
+    $basename = $this->tmpFileNamePrefix() . uniqid(rand(), true) . '.php';
+    $this->tmpfile = implode(DIRECTORY_SEPARATOR, array($tmpdir, $basename));
+    $this->remove_tmpdir = false;
+  }
+
+  private function _prepare()
+  {
+    if(!file_exists($this->tmpdir)) {
+      if(!mkdir($this->tmpdir)) {
+        $msg = "Failed to create '" . $this->tmpdir . "': " . (error_get_last()['message']);
+        throw new BootstrapError($msg);
+      }
+      $this->remove_tmpdir = true;
+    }
+    if(file_exists($this->tmpfile)) {
+      unlink($this->tmpfile);
+    }
+  }
+
+  private function _cleanup()
+  {
+    if(file_exists($this->tmpfile)) {
+      unlink($this->tmpfile);
+    }
+    if($this->remove_tmpdir && file_exists($this->tmpdir)) {
+      rmdir($this->tmpdir);
+      $this->remove_tmpdir = false;
+    }
+  }
+
+  private function _downloadInstaller()
+  {
+    if(!copy($this->url, $this->tmpfile)) {
+      $msg = "Failed to download '" . $this->url . "' =>  '" . $this->tmpfile . "': " . (error_get_last()['message']);
+      throw new BootstrapError($msg);
+    }
+  }
+
+  private function _getExpectedSignature()
+  {
+    $sig = file_get_contents($this->sig_url);
+    if($sig === false) {
+      $msg = "Failed to download installer signature: " . (error_get_last()['message']);
+      throw new BootstrapError($msg);
+    }
+    return trim($sig);
+  }
+
+  private function _getActualSignature()
+  {
+    $sig = hash_file('SHA384', $this->tmpfile);
+    if($sig === false) {
+      $msg = "Failed to compute installer signatur : " . (error_get_last()['message']);
+      throw new BootstrapError($msg);
+    }
+    return $sig;
+  }
+
+  private function _checkSignature($expected, $actual)
+  {
+    if ($actual !== $expected) {
+      $msg = 'Installer corrupt (signatures do not match)';
+      throw new BootstrapError($msg);
+    }
+  }
+
+  public function install()
+  {
+    try {
+      $this->_prepare();
+
+      $this->_downloadInstaller();
+
+      if(isset($this->sig_url)) {
+        $expected = $this->_getExpectedSignature();
+        $actual = $this->_getActualSignature();
+        $this->_checkSignature($expected, $actual);
+      }
+
+      $this->runInstallCmd();
+
+    } finally {
+
+      $this->_cleanup();
+
+    }
+  }
+}
+
+class ComposerInstaller extends AbstractInstaller
+{
+  protected function defaultUrl() { return 'https://getcomposer.org/installer'; }
+  protected function defaultSigUrl() { return 'https://composer.github.io/installer.sig'; }
+  protected function defaultFileName() { return 'composer'; }
+  protected function tmpFileNamePrefix() { return 'composer-setup-'; }
+
+  private static $_instance = null;
+
+  protected function runInstallCmd()
+  {
+      $cmd = "php " . $this->tmpfile .
+        " --quiet --install-dir=" . $this->install_dir .
+        " --filename=" . $this->filename;
+
+      system($cmd);
+  }
+
+  public static function instance(...$args)
+  {
+    if(!is_object(self::$_instance)) {
+      self::$_instance = new self(...$args);
+    }
+    return self::$_instance;
+  }
+}
+
+class SamiInstaller extends AbstractInstaller
+{
+  protected function defaultUrl() { return 'http://get.sensiolabs.org/sami.phar'; }
+  protected function defaultSigUrl() { return null; }
+  protected function defaultFileName() { return 'sami'; }
+  protected function tmpFileNamePrefix() { return 'sami-'; }
+
+  private static $_instance = null;
+
+  protected function runInstallCmd()
+  {
+    $destfile = implode(DIRECTORY_SEPARATOR, array($this->install_dir, $this->filename));
+    if(!copy($this->tmpfile, $destfile)) {
+      $msg = "Failed to copy file '". $this->tmpfile ."' => '". $destfile ."': ". (error_get_last()['message']);
+      throw new BootstrapError($msg);
+    }
+    if(!chmod($destfile, 0755)) {
+      $msg = "Failed to chmod on '". $destfile ."': ". (error_get_last()['message']);
+      throw new BootstrapError($msg);
+    }
+  }
+
+  public static function instance(...$args)
+  {
+    if(!is_object(self::$_instance)) {
+      self::$_instance = new self(...$args);
+    }
+    return self::$_instance;
+  }
+}
+
+class DockerComposerInstaller extends AbstractInstaller
+{
+  protected function defaultUrl() {
+    $release = '1.17.0';
+    $fname = 'docker-compose-' . self::system(). '-' . self::machine();
+    if('win' === strtolower(substr(self::system(),0,3))) {
+      $fname = $fname . '.exe';
+    }
+    return "https://github.com/docker/compose/releases/download/$release/$fname";
+  }
+  protected function defaultSigUrl() { return null; }
+  protected function defaultFileName() {
+    if('win' === strtolower(substr(self::system(),0,3))) {
+      return 'docker-compose.exe';
+    } else {
+      return 'docker-compose';
+    }
+  }
+  protected function tmpFileNamePrefix() { return 'docker-compose-'; }
+
+  private static $_instance = null;
+
+  protected function runInstallCmd()
+  {
+    $destfile = implode(DIRECTORY_SEPARATOR, array($this->install_dir, $this->filename));
+    if(!copy($this->tmpfile, $destfile)) {
+      $msg = "Failed to copy file '". $this->tmpfile ."' => '". $destfile ."': ". (error_get_last()['message']);
+      throw new BootstrapError($msg);
+    }
+    if(!chmod($destfile, 0755)) {
+      $msg = "Failed to chmod on '". $destfile ."': ". (error_get_last()['message']);
+      throw new BootstrapError($msg);
+    }
+  }
+
+  public static function instance(...$args)
+  {
+    if(!is_object(self::$_instance)) {
+      self::$_instance = new self(...$args);
+    }
+    return self::$_instance;
+  }
+}
+
+
+try {
+
+  ComposerInstaller::instance()->install();
+  SamiInstaller::instance()->install();
+  DockerComposerInstaller::instance()->install();
+
+} catch(BootstrapError $e) {
+
+  error_log($e->getMessage());
+  exit(1);
+
+}
+
+?>

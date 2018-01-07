@@ -1,0 +1,22 @@
+version: '3'
+services:
+  php-cli:
+    image: korowai/php:cli
+    depends_on:
+      - ldap-service
+    volumes:
+      - .:/korowai
+    working_dir: /korowai
+    entrypoint: [ "dockerize", "-wait", "tcp://ldap-service:389", "-timeout", "10s" ]
+
+  http-service:
+    image: korowai/php:apache
+    volumes:
+      - .:/korowai
+    working_dir: /korowai
+
+  ldap-service:
+    command: [ --copy-service, --loglevel, debug]
+    image: korowai/openldap
+    volumes:
+      - ./src/Korowai/Component/Ldap/Resources/ldif/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif

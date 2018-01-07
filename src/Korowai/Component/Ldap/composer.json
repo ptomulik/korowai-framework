@@ -1,0 +1,29 @@
+{
+    "name": "korowai/ldap",
+    "description": "Korowai LDAP component",
+    "type": "library",
+    "license": "MIT",
+    "suport": {
+      "issues": "https://github.com/korowai/framework/issues",
+      "source": "https://github.com/korowai/framework"
+    },
+    "authors": [
+        {
+            "name": "Paweł Tomulik",
+            "email": "ptomulik@meil.pw.edu.pl"
+        }
+    ],
+    "require": {
+        "php": ">=7.0",
+        "symfony/options-resolver": ">=3.3"
+    },
+    "autoload": {
+      "psr-4" : {
+        "Korowai\\Component\\Ldap\\" : ""
+      },
+      "exclude-from-classmap": [
+        "/Tests/"
+      ]
+    },
+    "minimum-stability": "dev"
+}

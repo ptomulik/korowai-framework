@@ -14,3 +14,44 @@ isolated territory.
 
 Korowai life highly dependent on trees. Similarly, some admins' work depends on
 LDAP database, which has tree structure.
+
+## Notes for users
+
+### Runtime Requirements
+
+PHP>=7.0 is required. In addition to PHP, you may need to install these
+packages
+
+```shell
+apt-get install php-xml php-mbstring
+```
+
+## Notes for developers
+
+### Development requirements
+
+- [docker](https://docker.com)
+
+### Initial preparations
+
+After you've just cloned
+
+```shell
+./bootstrap-dev && ./composer install
+```
+
+
+### Running integration tests
+
+```shell
+./docker-componse run --rm php-cli vendor/bin/behat
+./docker-compose down
+```
+
+### Generating api documentation
+
+```shell
+./sami update sami-local.conf.php
+```
+
+The generated API docs go to ``build/docks/api/build/local/``.
