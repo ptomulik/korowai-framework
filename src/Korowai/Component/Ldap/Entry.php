@@ -2,12 +2,12 @@
 /**
  * This file is part of the Korowai package
  *
- * (c) Paweł Tomulik <ptomulik@meil.pw.edu.pl>
- *
- * Distributed under MIT license.
+ * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @license Distributed under MIT license.
  */
 
 declare(strict_types=1);
+
 namespace Korowai\Component\Ldap;
 
 use Korowai\Component\Ldap\Exception\AttributeException;

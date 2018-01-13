@@ -1,4 +1,12 @@
 <?php
+/**
+ * This file is part of the Korowai package
+ *
+ * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @license Distributed under MIT license.
+ */
+
+declare(strict_types=1);
 
 use Behat\Behat\Tester\Exception\PendingException;
 use Behat\Behat\Context\Context;
