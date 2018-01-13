@@ -1,7 +1,7 @@
-# korowai-framework
+# Korowai Framework
 
-[![Build Status](https://travis-ci.org/korowai-framework/korowai-framework.svg?branch=master)](https://travis-ci.org/korowai-framework/korowai-framework)
-[![Coverage Status](https://coveralls.io/repos/github/korowai-framework/korowai-framework/badge.svg?branch=devel)](https://coveralls.io/github/korowai-framework/korowai-framework?branch=devel)
+[![Build Status](https://travis-ci.org/korowai/framework.svg?branch=master)](https://travis-ci.org/korowai/framework)
+[![Coverage Status](https://coveralls.io/repos/github/korowai/framework/badge.svg?branch=devel)](https://coveralls.io/github/korowai/framework?branch=devel)
 
 Open Source software for exploring LDAP directories.
 
