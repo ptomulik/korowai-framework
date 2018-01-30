@@ -102,7 +102,6 @@ class LdapLink
      */
     public function bind($bind_rdn = null, $bind_password = null)
     {
-        //return @ldap_bind($this->link, $bind_rdn, $bind_password);
         $args = func_get_args();
         return @ldap_bind($this->link, ...$args);
     }
