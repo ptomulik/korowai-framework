@@ -107,6 +107,32 @@ class ExtLdapContext implements Context
       }
     }
 
+    /**
+     * @When I bind without arguments
+     */
+    public function iBindWithoutArguments()
+    {
+      try {
+        return $this->ldap->bind();
+      } catch(\Exception $e) {
+        $this->appendException($e);
+        return false;
+      }
+    }
+
+    /**
+     * @When I bind with binddn :arg1
+     */
+    public function iBindWithBinddn($arg1)
+    {
+      try {
+        return $this->ldap->bind($arg1);
+      } catch(\Exception $e) {
+        $this->appendException($e);
+        return false;
+      }
+    }
+
 
     /**
      * @When I bind with binddn :arg1 and password :arg2

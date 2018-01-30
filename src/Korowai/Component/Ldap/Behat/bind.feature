@@ -22,6 +22,16 @@ Feature: Simple bind
       | '{"host":"ldap-service"}'             | 'cn=admin,dc=example,dc=org' | 'admin'   |
       | '{"host":"ldap-service","port":389}'  | 'cn=admin,dc=example,dc=org' | 'admin'   |
 
+  Scenario Outline: Successful anonymous bind
+    Given I am connected to uri <uri>
+    When I bind with binddn <binddn> and password <password>
+    Then I should see no exception
+    And I should be bound
+
+    Examples:
+      |         uri           |           binddn             | password  |
+      | "ldap://ldap-service" |       ""                     |    ""     |
+
   Scenario Outline: LDAP link creation failure
     Given I am disconnected
     When I create ldap link with JSON config <config>
@@ -48,8 +58,30 @@ Feature: Simple bind
     Given I am connected to uri <uri>
     When I bind with binddn <binddn> and password <password>
     Then I should see ldap exception with message "Invalid credentials"
+    And I should not be bound
 
     Examples:
       |         uri           |           binddn             | password  |
       | "ldap://ldap-service" | "cn=admin,dc=example,dc=org" | "nimda"   |
       | "ldap://ldap-service" | "cn=nimda,dc=example,dc=org" | "admin"   |
+
+  Scenario Outline: Unsuccessful bind because of missing password
+    Given I am connected to uri <uri>
+    When I bind with binddn <binddn>
+    Then I should see ldap exception with message "Server is unwilling to perform"
+    And I should not be bound
+
+    Examples:
+      |         uri           |           binddn             |
+      | "ldap://ldap-service" | "cn=admin,dc=example,dc=org" |
+
+
+  Scenario Outline: Binding without arguments
+    Given I am connected to uri <uri>
+    When I bind without arguments
+    Then I should see no exception
+    And I should be bound
+
+    Examples:
+      |         uri           |
+      | "ldap://ldap-service" |

@@ -26,7 +26,7 @@ class LdapLinkTest extends TestCase
 
     public function getLdapFunctionMock(...$args)
     {
-        return $this->getFunctionMock('\\Korowai\\Component\\Ldap\\Adapter\ExtLdap', ...$args);
+        return $this->getFunctionMock('\Korowai\Component\Ldap\Adapter\ExtLdap', ...$args);
     }
 
     private function createLdapLink($host = 'host', $port = 123, $resource = 'ldap link')
@@ -169,6 +169,34 @@ class LdapLinkTest extends TestCase
                 ->willReturn('ok');
 
         $this->assertSame('ok', $ldap->bind('dc=korowai,dc=org', '$3cr3t'));
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_bind_0args()
+    {
+        $ldap = $this->createLdapLink();
+        $this   ->getLdapFunctionMock("ldap_bind")
+                ->expects($this->once())
+                ->with('ldap link')
+                ->willReturn('ok');
+
+        $this->assertSame('ok', $ldap->bind());
+    }
+
+    /**
+     * @runInSeparateProcess
+     */
+    public function test_bind_1arg()
+    {
+        $ldap = $this->createLdapLink();
+        $this   ->getLdapFunctionMock("ldap_bind")
+                ->expects($this->once())
+                ->with('ldap link', 'dc=korowai,dc=org')
+                ->willReturn('ok');
+
+        $this->assertSame('ok', $ldap->bind('dc=korowai,dc=org'));
     }
 
     /**

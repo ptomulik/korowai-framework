@@ -105,7 +105,8 @@ class Ldap implements LdapInterface
      */
     public function bind(string $dn = null, string $password = null)
     {
-        return $this->getBinding()->bind($dn, $password);
+        $args = @func_get_args();
+        return $this->getBinding()->bind(...$args);
     }
 
     /**

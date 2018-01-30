@@ -99,7 +99,8 @@ class Binding implements BindingInterface
      */
     public function bind(string $dn = null, string $password = null)
     {
-        return $this->callImplMethod('bindImpl', $dn, $password);
+        $args = @func_get_args();
+        return $this->callImplMethod('bindImpl', ...$args);
     }
 
     /**
@@ -152,7 +153,8 @@ class Binding implements BindingInterface
      */
     private function bindImpl(string $dn = null, string $password = null)
     {
-        $result = $this->getLink()->bind($dn, $password);
+        $args = func_get_args();
+        $result = $this->getLink()->bind(...$args);
         if(!$result) {
             $this->bound = false;
             throw static::lastLdapException($this->link);
