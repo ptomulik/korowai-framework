@@ -120,8 +120,8 @@ class Entry
      * its values will be replaced with values provided in $attributes. If
      * there is no attribute in Entry, it'll be added to Entry.
      *
+     * @param array $attributes
      * @throws AttributeException
-     * @return array
      */
     public function setAttributes(array $attributes)
     {
@@ -150,8 +150,6 @@ class Entry
      *
      * @param string $name
      * @param array $values
-     *
-     * @return void
      */
     public function setAttribute(string $name, array $values)
     {
