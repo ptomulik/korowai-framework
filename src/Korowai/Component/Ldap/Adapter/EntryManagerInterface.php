@@ -39,6 +39,8 @@ interface EntryManagerInterface
      * Renames an entry on the Ldap server
      *
      * @param Entry $entry
+     * @param string $newRdn
+     * @param bool $deleteOldRdn
      *
      * @throws LdapException
      */

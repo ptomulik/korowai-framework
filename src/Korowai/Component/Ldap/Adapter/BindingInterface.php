@@ -34,9 +34,6 @@ interface BindingInterface
 
     /**
      * Unbinds the connection
-     *
-     * @param string $dn        The user's DN
-     * @param string $password  The associated password
      */
     public function unbind();
 }

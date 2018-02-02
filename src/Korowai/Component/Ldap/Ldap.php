@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace Korowai\Component\Ldap;
 
 use Korowai\Component\Ldap\Entry;
-use Korowai\Component\Ldap\LdapInterface;
+use Korowai\Component\Ldap\AbstractLdap;
 use Korowai\Component\Ldap\Adapter\AdapterInterface;
 use Korowai\Component\Ldap\Adapter\AdapterFactoryInterface;
 use Korowai\Component\Ldap\Adapter\BindingInterface;
@@ -27,9 +27,9 @@ use \InvalidArgumentException;
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
  */
-class Ldap implements LdapInterface
+class Ldap extends AbstractLdap
 {
-    protected static $defaultAdapterFactory = '\\Korowai\\Component\\Ldap\\Adapter\\ExtLdap\\AdapterFactory';
+    protected static $defaultAdapterFactory = '\Korowai\Component\Ldap\Adapter\ExtLdap\AdapterFactory';
 
     /** @var AdapterInterface */
     private $adapter;
@@ -163,20 +163,6 @@ class Ldap implements LdapInterface
     public function createQuery(string $base_dn, string $filter, array $options = array()) : QueryInterface
     {
         return $this->getAdapter()->createQuery($base_dn, $filter, $options);
-    }
-
-    /**
-     * Create query, execute and return its result
-     *
-     * @param string $base_dn
-     * @param string $filter
-     * @param array $options
-     *
-     * @return ResultInterface Query result
-     */
-    public function query(string $base_dn, string $filter, array $options = array()) : ResultInterface
-    {
-        return $this->createQuery($base_dn, $filter, $options)->getResult();
     }
 }
 
