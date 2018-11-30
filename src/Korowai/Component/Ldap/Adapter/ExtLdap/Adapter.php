@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -52,7 +53,7 @@ class Adapter implements AdapterInterface
      */
     public function getBinding() : BindingInterface
     {
-        if(!isset($this->binding)) {
+        if (!isset($this->binding)) {
             $link = $this->getLdapLink();
             $this->binding = new Binding($link);
         }
@@ -64,7 +65,7 @@ class Adapter implements AdapterInterface
      */
     public function getEntryManager() : EntryManagerInterface
     {
-        if(!isset($this->entryManager)) {
+        if (!isset($this->entryManager)) {
             $link = $this->getLdapLink();
             $this->entryManager = new EntryManager($link);
         }

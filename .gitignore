@@ -1,6 +1,6 @@
 # Local stuff and temporary
 /composer
-/sami
+/phpdoc
 /docker-compose
 /tmp
 /build

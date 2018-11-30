@@ -1,0 +1,14 @@
+---
+version: "2"
+exclude_patterns:
+  - "vendor/"
+  - "build/"
+  - "**/Tests/"
+  - "**/Behat/"
+  - "src/Korowai/Component/Ldap/Adapter/ExtLdap/LdapLink.php"
+  - "src/Korowai/Component/Ldap/Adapter/ExtLdap/Result.php"
+  - "src/Korowai/Component/Ldap/Adapter/ExtLdap/ResultEntry.php"
+  - "src/Korowai/Component/Ldap/Adapter/ExtLdap/ResultReference.php"
+plugins:
+  phpcodesniffer:
+    enabled: true

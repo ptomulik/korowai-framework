@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -53,7 +54,7 @@ class Query extends AbstractQuery
 
     protected static function getDerefOption(array $options)
     {
-        if(isset($options['deref'])) {
+        if (isset($options['deref'])) {
             return constant('LDAP_DEREF_' . strtoupper($options['deref']));
         } else {
             return LDAP_DEREF_NEVER;
@@ -67,7 +68,7 @@ class Query extends AbstractQuery
     {
         $options = $this->getOptions();
         $scope = strtolower(isset($options['scope']) ? $options['scope'] : 'sub');
-        switch($scope) {
+        switch ($scope) {
             case 'base':
                 $func = 'read';
                 break;
@@ -89,7 +90,8 @@ class Query extends AbstractQuery
     private function doExecuteQueryImpl($func)
     {
         $options = $this->getOptions();
-        $result = call_user_func(array($this->link, $func),
+        $result = call_user_func(
+            array($this->link, $func),
             $this->base_dn,
             $this->filter,
             $options['attributes'],
@@ -98,7 +100,7 @@ class Query extends AbstractQuery
             $options['timeLimit'],
             static::getDerefOption($options)
         );
-        if(false === $result) {
+        if (false === $result) {
             throw static::lastLdapException($this->link);
         }
         return $result;

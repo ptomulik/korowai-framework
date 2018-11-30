@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -48,7 +49,7 @@ class ResultReference extends ResultEntry implements ResultReferenceInterface
      */
     public function getReferrals()
     {
-        if(!$this->parse_reference($referrals)) {
+        if (!$this->parse_reference($referrals)) {
             return false;
         }
         return $referrals;

@@ -184,12 +184,12 @@ class ComposerInstaller extends AbstractInstaller
   }
 }
 
-class SamiInstaller extends AbstractInstaller
+class PhpDocInstaller extends AbstractInstaller
 {
-  protected function defaultUrl() { return 'http://get.sensiolabs.org/sami.phar'; }
+  protected function defaultUrl() { return 'http://www.phpdoc.org/phpDocumentor.phar'; }
   protected function defaultSigUrl() { return null; }
-  protected function defaultFileName() { return 'sami'; }
-  protected function tmpFileNamePrefix() { return 'sami-'; }
+  protected function defaultFileName() { return 'phpdoc'; }
+  protected function tmpFileNamePrefix() { return 'phpdoc-'; }
 
   private static $_instance = null;
 
@@ -263,7 +263,7 @@ class DockerComposerInstaller extends AbstractInstaller
 try {
 
   ComposerInstaller::instance()->install();
-  SamiInstaller::instance()->install();
+  PhpDocInstaller::instance()->install();
   DockerComposerInstaller::instance()->install();
 
 } catch(BootstrapError $e) {

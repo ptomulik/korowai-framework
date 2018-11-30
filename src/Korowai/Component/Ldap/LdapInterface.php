@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -15,15 +16,15 @@ use Korowai\Component\Ldap\Adapter\EntryManagerInterface;
 use Korowai\Component\Ldap\Adapter\AdapterInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-
 /**
  * LDAP interface
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
  */
-interface LdapInterface extends BindingInterface,
-                                EntryManagerInterface,
-                                AdapterInterface
+interface LdapInterface extends
+    BindingInterface,
+    EntryManagerInterface,
+    AdapterInterface
 {
     /**
      * Returns adapter

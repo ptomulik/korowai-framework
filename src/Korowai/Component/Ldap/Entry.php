@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -97,7 +98,7 @@ class Entry
      */
     public function ensureAttributeExists(string $name)
     {
-        if(!$this->hasAttribute($name)) {
+        if (!$this->hasAttribute($name)) {
             $msg = "Entry '" . $this->dn . "' has no attribute '". $name ."'";
             throw new AttributeException($msg);
         }
@@ -126,7 +127,7 @@ class Entry
     public function setAttributes(array $attributes)
     {
         $this->validateAttributes($attributes);
-        foreach($attributes as $name => $values) {
+        foreach ($attributes as $name => $values) {
             $this->attributes[$name] = $values;
         }
     }
@@ -140,7 +141,7 @@ class Entry
      */
     public function validateAttributes(array $attributes)
     {
-        foreach($attributes as $name => $values) {
+        foreach ($attributes as $name => $values) {
             $this->validateAttribute($name, $values);
         }
     }

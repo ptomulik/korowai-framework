@@ -37,21 +37,33 @@ apt-get install php-xml php-mbstring
 After you've just cloned
 
 ```shell
-./bootstrap-dev && ./composer install
+php bootstrap-dev && php composer install
 ```
 
+### Running unit tests
+
+```shell
+php vendor/bin/phpunit
+```
 
 ### Running integration tests
 
 ```shell
-./docker-componse run --rm php-cli vendor/bin/behat
+./docker-compose run --rm php-cli vendor/bin/behat
+./docker-compose down
+```
+
+### Running CodeClimate
+
+```shell
+./docker-compose run --rm codeclimate analyze
 ./docker-compose down
 ```
 
 ### Generating api documentation
 
 ```shell
-./sami update sami-local.conf.php
+php phpdoc
 ```
 
-The generated API docs go to ``build/docks/api/build/local/``.
+The generated API docs go to ``build/docs/api/``.

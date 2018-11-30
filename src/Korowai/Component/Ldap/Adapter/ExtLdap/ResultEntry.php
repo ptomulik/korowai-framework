@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -137,7 +138,7 @@ class ResultEntry extends AbstractResultEntry
      */
     public function getAttributeIterator() : ResultAttributeIteratorInterface
     {
-        if(!isset($this->iterator)) {
+        if (!isset($this->iterator)) {
             $first = $this->first_attribute();
             $this->iterator = new ResultAttributeIterator($this, $first);
         }
@@ -158,10 +159,10 @@ class ResultEntry extends AbstractResultEntry
      */
     public function getAttributes() : array
     {
-        $attribs = array_filter($this->get_attributes(), function($key) {
+        $attribs = array_filter($this->get_attributes(), function ($key) {
             return is_string($key) && ($key != "count");
         }, ARRAY_FILTER_USE_KEY);
-        array_walk($attribs, function(&$value) {
+        array_walk($attribs, function (&$value) {
             unset($value['count']);
         });
         return array_change_key_case($attribs, CASE_LOWER);

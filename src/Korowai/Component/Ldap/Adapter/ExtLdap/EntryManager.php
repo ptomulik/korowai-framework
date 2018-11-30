@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -101,7 +102,7 @@ class EntryManager implements EntryManagerInterface
      */
     private function addImpl(Entry $entry)
     {
-        if(!$this->getLink()->add($entry->getDn(), $entry->getAttributes())) {
+        if (!$this->getLink()->add($entry->getDn(), $entry->getAttributes())) {
             throw static::lastLdapException($this->link);
         }
     }
@@ -111,7 +112,7 @@ class EntryManager implements EntryManagerInterface
      */
     public function updateImpl(Entry $entry)
     {
-        if(!$this->getLink()->modify($entry->getDn(), $entry->getAttributes())) {
+        if (!$this->getLink()->modify($entry->getDn(), $entry->getAttributes())) {
             throw static::lastLdapException($this->link);
         }
     }
@@ -123,7 +124,7 @@ class EntryManager implements EntryManagerInterface
      */
     public function renameImpl(Entry $entry, string $newRdn, bool $deleteOldRdn = true)
     {
-        if(!$this->getLink()->rename($entry->getDn(), $newRdn, null, $deleteOldRdn)) {
+        if (!$this->getLink()->rename($entry->getDn(), $newRdn, null, $deleteOldRdn)) {
             throw static::lastLdapException($this->link);
         }
     }
@@ -135,7 +136,7 @@ class EntryManager implements EntryManagerInterface
      */
     public function deleteImpl(Entry $entry)
     {
-        if(!$this->getLink()->delete($entry->getDn())) {
+        if (!$this->getLink()->delete($entry->getDn())) {
             throw static::lastLdapException($this->link);
         }
     }

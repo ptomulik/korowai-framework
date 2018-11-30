@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -12,7 +13,6 @@ namespace Korowai\Component\Ldap\Adapter\ExtLdap;
 
 use Korowai\Component\Ldap\Exception\LdapException;
 use Korowai\Component\Ldap\Adapter\ExtLdap\LdapLink;
-
 
 /**
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>

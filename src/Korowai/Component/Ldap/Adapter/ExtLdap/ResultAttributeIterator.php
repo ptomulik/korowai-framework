@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -23,7 +24,8 @@ use Korowai\Component\Ldap\Adapter\ExtLdap\ResultEntry;
  * ``ResultAttributeIterator::__construct()``). This is a consequence of how
  * PHP ldap extension implements attribute iteration &mdash; the ``berptr``
  * argument to ``libldap`` functions
- * [ldap_first_attribute (3)](https://manpages.debian.org/stretch-backports/libldap2-dev/ldap_first_attribute.3.en.html) and
+ * [ldap_first_attribute (3)](https://manpages.debian.org/stretch-backports/libldap2-dev/ldap_first_attribute.3.en.html)
+ * and
  * [ldap_next_attribute (3)](https://manpages.debian.org/stretch-backports/libldap2-dev/ldap_next_attribute.3.en.html)
  * is stored by PHP ldap extension in an ``"ldap entry"`` resource and is
  * inaccessible for user.

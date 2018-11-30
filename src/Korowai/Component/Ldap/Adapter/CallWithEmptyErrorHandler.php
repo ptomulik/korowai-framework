@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -15,7 +16,7 @@ namespace Korowai\Component\Ldap\Adapter;
  */
 trait CallWithEmptyErrorHandler
 {
-    private static function emptyErrorHandler_b7830210430($errno, $errstr)
+    private static function emptyErrorHandlerB7830210430($errno, $errstr)
     {
         return true;
     }
@@ -30,7 +31,7 @@ trait CallWithEmptyErrorHandler
      */
     public function callWithEmptyErrorHandler(string $name, ...$args)
     {
-        set_error_handler([static::class, 'emptyErrorHandler_b7830210430']);
+        set_error_handler([static::class, 'emptyErrorHandlerB7830210430']);
         try {
             $retval = call_user_func_array([$this,$name], $args);
         } finally {

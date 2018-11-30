@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -69,7 +70,7 @@ class Binding implements BindingInterface
      */
     public function ensureLink() : bool
     {
-        if(!$this->isLinkValid()) {
+        if (!$this->isLinkValid()) {
             throw new LdapException("Uninitialized LDAP link", -1);
         }
         return true;
@@ -155,7 +156,7 @@ class Binding implements BindingInterface
     {
         $args = func_get_args();
         $result = $this->getLink()->bind(...$args);
-        if(!$result) {
+        if (!$result) {
             $this->bound = false;
             throw static::lastLdapException($this->link);
         }
@@ -168,7 +169,7 @@ class Binding implements BindingInterface
      */
     private function getOptionImpl(int $option)
     {
-        if(!$this->link->get_option($option, $retval)) {
+        if (!$this->link->get_option($option, $retval)) {
             throw static::lastLdapException($this->link);
         }
         return $retval;
@@ -179,7 +180,7 @@ class Binding implements BindingInterface
      */
     public function setOptionImpl(int $option, $value)
     {
-        if(!$this->link->set_option($option, $value)) {
+        if (!$this->link->set_option($option, $value)) {
             throw static::lastLdapException($this->link);
         }
     }
@@ -189,7 +190,7 @@ class Binding implements BindingInterface
      */
     private function unbindImpl()
     {
-        if(!$this->link->unbind()) {
+        if (!$this->link->unbind()) {
             throw static::lastLdapException($this->link);
         }
         $this->bound = false;

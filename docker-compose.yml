@@ -20,3 +20,13 @@ services:
     image: korowai/openldap
     volumes:
       - ./src/Korowai/Component/Ldap/Resources/ldif/bootstrap.ldif:/container/service/slapd/assets/config/bootstrap/ldif/50-bootstrap.ldif
+
+  codeclimate:
+    image: codeclimate/codeclimate
+    environment:
+      - CODECLIMATE_CODE=${PWD}
+    volumes:
+      - .:/code
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /tmp/cc:/tmp/cc
+    working_dir: /code

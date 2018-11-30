@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -30,7 +31,7 @@ abstract class AbstractResult implements ResultInterface
      */
     public function getIterator()
     {
-        foreach($this->getResultEntryIterator() as $key => $entry) {
+        foreach ($this->getResultEntryIterator() as $key => $entry) {
             yield $key => $entry->toEntry();
         }
     }

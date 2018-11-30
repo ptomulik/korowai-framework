@@ -3,6 +3,7 @@
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -24,7 +25,6 @@ use Korowai\Component\Ldap\Adapter\ExtLdap\LastLdapException;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-
 /**
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
  */
@@ -43,7 +43,7 @@ class AdapterFactory extends AbstractAdapterFactory
      */
     public function __construct(array $config = null)
     {
-        if(!@extension_loaded('ldap')) {
+        if (!@extension_loaded('ldap')) {
             throw new LdapException("The LDAP PHP extension is not enabled.", -1);
         }
         parent::__construct($config);
@@ -66,7 +66,7 @@ class AdapterFactory extends AbstractAdapterFactory
             },
             'createLdapLinkImpl'
         );
-        if(!$link) {
+        if (!$link) {
             // throw this exception in case ldap-ext forgot to trigger_error
             throw new LdapException('Failed to create LDAP connection', -1);
         }
@@ -82,7 +82,7 @@ class AdapterFactory extends AbstractAdapterFactory
     private function configureLdapLink(LdapLink $link)
     {
         $config = $this->getConfig();
-        foreach($config['options'] as $name => $value) {
+        foreach ($config['options'] as $name => $value) {
             $option = $this->getLdapLinkOptionConstant($name);
             $this->setLdapLinkOption($link, $option, $value);
         }
@@ -91,15 +91,12 @@ class AdapterFactory extends AbstractAdapterFactory
     private function setLdapLinkOption(LdapLink $link, int $option, $value)
     {
         static::ensureLdapLink($link);
-        $this->callWithEmptyErrorHandler(
-            'setLdapLinkOptionImpl',
-            $link, $option, $value
-        );
+        $this->callWithEmptyErrorHandler('setLdapLinkOptionImpl', $link, $option, $value);
     }
 
     private function setLdapLinkOptionImpl(LdapLink $link, int $option, $value)
     {
-        if(!$link->set_option($option, $value)) {
+        if (!$link->set_option($option, $value)) {
             throw static::lastLdapException($link);
         }
     }
