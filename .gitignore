@@ -1,16 +1,32 @@
-# Local stuff and temporary
+# Locally installed binaries
 /composer
-/sami
+/phpdoc
 /docker-compose
 /tmp
-/build
 /tests/cache
+*.phar
+
+# Files generated locally
+/build/
+/docs/build/
+/docs/cache/
+/docs/_build/
+/docs/_cache/
+
+# .env file for docker-compose
+/.env
 
 # composer.lock
 composer.lock
 
-# phpunit
-phpunit.xml
+# phpunit (we only commit phpunit.xml.dist)
+/phpunit.xml
+
+# phpunit temporary files
+.phpunit.result.cache
+
+# phpdoc (we only commit phpdoc.xml.dist)
+/phpdoc.xml
 
 # IDEs and editors
 /.idea
@@ -33,11 +49,23 @@ phpunit.xml
 !.vscode/launch.json
 !.vscode/extensions.json
 
+# Pipenv, setuptools, etc.
+/pipenv
+.venv/
+/dist/
+*.egg-info
+*.tox
+*.deb
+/MANIFEST
+
+# Lumen generated
+/storage/logs/
 
 # Others
 /vendor
 /.idea
 /.vagrant
+/core
 Homestead.json
 Homestead.yaml
 yarn-error.log
