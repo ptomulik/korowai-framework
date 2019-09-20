@@ -43,7 +43,6 @@
         "Korowai\\Lib\\" : "src/Korowai/Lib"
       },
       "files" : [
-        "src/Korowai/Lib/Ldif/Util/functions.php",
         "src/Korowai/Lib/Context/functions.php"
       ],
       "exclude-from-classmap": [
