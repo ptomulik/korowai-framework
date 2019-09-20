@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor xmlns="http://www.phpdoc.org" version="3">
+    <!--<title>Korowai Framework</title>-->
+  <paths>
+    <output>docs/build/html/api</output>
+    <cache>docs/build/cache/api</cache>
+  </paths>
+  <version number="0.1">
+    <api format="php">
+      <source dsn="file://.">
+        <path>src</path>
+      </source>
+      <ignore>
+        <path>*/Tests/*</path>
+        <path>*/Behat/*</path>
+      </ignore>
+      <visibility>public</visibility>
+      <visibility>private</visibility>
+      <visibility>protected</visibility>
+      <default-package-name>korowai/framework</default-package-name>
+    </api>
+  </version>
+  <template name="clean"/>
+  <!--
+  <title>Korowai Framework</title>
+  <parser>
+    <target>docs/build/html/api</target>
+  </parser>
+  <transformer>
+    <target>docs/build/html/api</target>
+  </transformer>
+  <transformations>
+    <template name="abstract" />
+  </transformations>
+  <files>
+    <directory>src</directory>
+    <ignore>*/Tests/*</ignore>
+    <ignore>*/Behat/*</ignore>
+  </files>-->
+</phpdocumentor>

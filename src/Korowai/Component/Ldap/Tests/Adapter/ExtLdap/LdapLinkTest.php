@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/Adapter/ExtLdap/LdapLinkTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -379,8 +382,6 @@ class LdapLinkTest extends TestCase
 
     /**
      * @runInSeparateProcess
-     * @expectedException BadMethodCallException
-     * @expectedExceptionMessage Not implemented
      */
     public function test_count_references()
     {
@@ -393,6 +394,8 @@ class LdapLinkTest extends TestCase
 //                ->with('ldap link', 'ldap result')
 //                ->willReturn(333);
 
+        $this->expectException(\BadMethodCallException::class);
+        $this->expectExceptionMessage('Not implemented');
         $this->assertSame(333, $ldap->count_references($result));
     }
 

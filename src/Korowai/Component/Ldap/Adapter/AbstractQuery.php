@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/AbstractQuery.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -15,7 +18,6 @@ use Korowai\Component\Ldap\Adapter\ResultInterface;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
-
 
 /**
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
@@ -100,7 +102,7 @@ abstract class AbstractQuery implements QueryInterface
      */
     public function getResult() : ResultInterface
     {
-        if(!isset($this->result)) {
+        if (!isset($this->result)) {
             return $this->execute();
         }
         return $this->result;
@@ -135,7 +137,7 @@ abstract class AbstractQuery implements QueryInterface
         $resolver->setAllowedValues('scope', array('base', 'one', 'sub'));
         $resolver->setAllowedValues('deref', array('always', 'never', 'finding', 'searching'));
 
-        $resolver->setNormalizer('attributes', function(Options $optins,$value) {
+        $resolver->setNormalizer('attributes', function (Options $optins, $value) {
             return is_array($value) ? $value : array($value);
         });
     }

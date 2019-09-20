@@ -2,10 +2,10 @@
 
 default:
   autoload:
-    - %paths.base%/src/Korowai/Component/Ldap/Behat/bootstrap
+    - "%paths.base%/src/Korowai/Component/Ldap/Behat"
   suites:
     ldap:
       paths:
-        - %paths.base%/src/Korowai/Component/Ldap/Behat
+        - "%paths.base%/src/Korowai/Component/Ldap/Behat"
       contexts:
-        - ExtLdapContext
+        - "Korowai\\Component\\Ldap\\Behat\\ExtLdapContext"

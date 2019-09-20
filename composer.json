@@ -3,31 +3,49 @@
     "description": "Framework for Korowai project",
     "type": "library",
     "license": "MIT",
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "authors": [
         {
             "name": "Paweł Tomulik",
             "email": "ptomulik@meil.pw.edu.pl"
         }
     ],
-    "require": {
-        "php": "^7.0",
-        "symfony/options-resolver": "^3.3"
-    },
     "replace": {
-      "korowai/ldap": "self.version"
+      "korowai/ldap": "self.version",
+      "korowai/ldap-service": "self.version",
+      "korowai/basiclib" : "self.version",
+      "korowai/contextlib" : "self.version",
+      "korowai/errorlib" : "self.version"
+    },
+    "require": {
+        "php": ">=7.1.3",
+        "ext-mbstring": "*",
+        "ext-xml": "*",
+        "ext-ldap": "*",
+        "symfony/options-resolver": ">=4.2",
+        "illuminate/support": ">=5.8"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.4",
-        "php-mock/php-mock-phpunit": "^2.0.1",
+        "phpunit/phpunit": ">=7.5.16",
+        "php-mock/php-mock-phpunit": ">=2.4.0",
         "phake/phake": "^3.0",
         "behat/behat": "^3.4",
-        "symfony/filesystem": "^3.3",
-        "symfony/finder": "^3.3"
+        "symfony/filesystem": ">=4.2",
+        "symfony/finder": ">=4.2",
+        "laravel/lumen-framework": ">=5.8",
+        "laravel/tinker": ">=1.0.8",
+        "zendframework/zend-ldap": "*"
     },
     "autoload": {
       "psr-4" : {
-        "Korowai\\Component\\" : "src/Korowai/Component/"
+        "Korowai\\Component\\" : "src/Korowai/Component/",
+        "Korowai\\Lib\\" : "src/Korowai/Lib"
       },
+      "files" : [
+        "src/Korowai/Lib/Ldif/Util/functions.php",
+        "src/Korowai/Lib/Context/functions.php"
+      ],
       "exclude-from-classmap": [
         "**/Tests/"
       ]

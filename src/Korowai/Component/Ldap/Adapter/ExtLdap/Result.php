@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/ExtLdap/Result.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -54,7 +57,7 @@ class Result extends AbstractResult
      */
     public function __destruct()
     {
-        if($this->isValid()) {
+        if ($this->isValid()) {
             $this->free_result();
         }
     }
@@ -85,10 +88,14 @@ class Result extends AbstractResult
         return $this->result;
     }
 
+    // @codingStandardsIgnoreStart
+    // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName
+
     /**
      * Retrieve the LDAP pagination cookie
      *
-     * @link http://php.net/manual/en/function.ldap-control-paged-result-response.php ldap_control_paged_result_response()
+     * @link http://php.net/manual/en/function.ldap-control-paged-result-response.php
+     *       ldap_control_paged_result_response()
      */
     public function control_paged_result_response(&...$args)
     {
@@ -174,6 +181,9 @@ class Result extends AbstractResult
     {
         return $this->link->sort($this, $sortfilter);
     }
+
+    // phpcs:enable Generic.NamingConventions.CamelCapsFunctionName
+    // @codingStandardsIgnoreEnd
 
     /**
      * {@inheritdoc}

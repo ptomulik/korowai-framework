@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/ExtLdap/AdapterFactory.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -18,12 +21,13 @@ use Korowai\Component\Ldap\Adapter\ExtLdap\Adapter;
 
 use Korowai\Component\Ldap\Adapter\ExtLdap\LdapLinkOptions;
 use Korowai\Component\Ldap\Adapter\ExtLdap\EnsureLdapLink;
-use Korowai\Component\Ldap\Adapter\CallWithCustomErrorHandler;
-use Korowai\Component\Ldap\Adapter\CallWithEmptyErrorHandler;
 use Korowai\Component\Ldap\Adapter\ExtLdap\LastLdapException;
 
-use Symfony\Component\OptionsResolver\OptionsResolver;
+use function Korowai\Lib\Context\with;
+use Korowai\Lib\Error\ExceptionErrorHandler;
+use Korowai\Lib\Error\EmptyErrorHandler;
 
+use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
@@ -33,8 +37,6 @@ class AdapterFactory extends AbstractAdapterFactory
     use LdapLinkOptions;
     use EnsureLdapLink;
     use LastLdapException;
-    use CallWithCustomErrorHandler;
-    use CallWithEmptyErrorHandler;
 
     /**
      * Creates instance of AdapterFactory
@@ -43,7 +45,7 @@ class AdapterFactory extends AbstractAdapterFactory
      */
     public function __construct(array $config = null)
     {
-        if(!@extension_loaded('ldap')) {
+        if (!@extension_loaded('ldap')) {
             throw new LdapException("The LDAP PHP extension is not enabled.", -1);
         }
         parent::__construct($config);
@@ -59,14 +61,13 @@ class AdapterFactory extends AbstractAdapterFactory
 
     private function createLdapLink()
     {
-        $link = $this->callWithCustomErrorHandler(
-            // intercept error message from ldap-ext
-            function ($errno, $errstr) {
-                throw new LdapException($errstr, -1);
-            },
-            'createLdapLinkImpl'
-        );
-        if(!$link) {
+        $handler = ExceptionErrorHandler::create(function ($severity, $message, ...$args) {
+            return new LdapException($message, -1, $severity, ...$args);
+        });
+        $link = with($handler)(function ($eh) {
+            return $this->createLdapLinkImpl();
+        });
+        if (!$link) {
             // throw this exception in case ldap-ext forgot to trigger_error
             throw new LdapException('Failed to create LDAP connection', -1);
         }
@@ -82,7 +83,7 @@ class AdapterFactory extends AbstractAdapterFactory
     private function configureLdapLink(LdapLink $link)
     {
         $config = $this->getConfig();
-        foreach($config['options'] as $name => $value) {
+        foreach ($config['options'] as $name => $value) {
             $option = $this->getLdapLinkOptionConstant($name);
             $this->setLdapLinkOption($link, $option, $value);
         }
@@ -91,15 +92,14 @@ class AdapterFactory extends AbstractAdapterFactory
     private function setLdapLinkOption(LdapLink $link, int $option, $value)
     {
         static::ensureLdapLink($link);
-        $this->callWithEmptyErrorHandler(
-            'setLdapLinkOptionImpl',
-            $link, $option, $value
-        );
+        with(EmptyErrorHandler::getInstance())(function ($eh) use ($link, $option, $value) {
+            $this->setLdapLinkOptionImpl($link, $option, $value);
+        });
     }
 
     private function setLdapLinkOptionImpl(LdapLink $link, int $option, $value)
     {
-        if(!$link->set_option($option, $value)) {
+        if (!$link->set_option($option, $value)) {
             throw static::lastLdapException($link);
         }
     }

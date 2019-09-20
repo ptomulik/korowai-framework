@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/Adapter/ExtLdap/EnsureLdapLinkTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -22,11 +25,6 @@ class EnsureLdapLinkTest extends TestCase
 {
     use EnsureLdapLink;
 
-    /**
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionMessage Uninitialized LDAP link
-     * @expectedExceptionCode -1
-     */
     public function test_ensureLdapLink_Failure()
     {
       $link = $this->createMock(LdapLink::class);
@@ -34,6 +32,10 @@ class EnsureLdapLinkTest extends TestCase
            ->method('isValid')
            ->with()
            ->willReturn(false);
+
+      $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+      $this->expectExceptionMessage('Uninitialized LDAP link');
+      $this->expectExceptionCode(-1);
       static::ensureLdapLink($link);
     }
 

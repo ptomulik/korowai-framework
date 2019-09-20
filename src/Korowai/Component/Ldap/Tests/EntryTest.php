@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/EntryTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -19,20 +22,17 @@ use Korowai\Component\Ldap\Exception\AttributeException;
  */
 class EntryTest extends TestCase
 {
-    /**
-     * @expectedException \TypeError
-     */
     public function test_constructNoDn()
     {
+        $this->expectException(\TypeError::class);
         new Entry();
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 1 .+::__construct\(\) .+ integer given/
-     */
     public function test_construct_InvalidDn()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 1 .+::__construct\(\) .+ int(eger)? given/');
+
         new Entry(123);
     }
 
@@ -57,30 +57,27 @@ class EntryTest extends TestCase
         $this->assertSame(array('userid' => array('ptomulik')), $entry->getAttributes());
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 2 .+::__construct\(\) .+ string given/
-     */
     public function test_construct_InvalidAttributes_1()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 2 .+::__construct\(\) .+ string given/');
+
         new Entry('dc=example,dc=com', 'foo');
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 1 .+::validateAttribute\(\) .+ integer given/
-     */
     public function test_construct_InvalidAttributes_2()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 1 .+::validateAttribute\(\) .+ int(eger)? given/');
+
         new Entry('dc=example,dc=com', ['foo']);
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 2 .+::validateAttribute\(\) .+ string given/
-     */
     public function test_construct_InvalidAttributes_3()
     {
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 2 .+::validateAttribute\(\) .+ string given/');
+
         new Entry('dc=example,dc=com', ['foo' => 'bar']);
     }
 
@@ -92,13 +89,13 @@ class EntryTest extends TestCase
         $this->assertSame('dc=korowai,dc=org', $entry->getDn());
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 1 .+::setDn\(\) .+ integer given/
-     */
     public function test_setDn_InvalidDn()
     {
         $entry = new Entry('dc=example,dc=com');
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 1 .+::setDn\(\) .+ int(eger)? given/');
+
         $entry->setDn(123);
     }
 
@@ -109,23 +106,23 @@ class EntryTest extends TestCase
         $this->assertSame('dc=example,dc=com', $entry->getDn());
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 1 .+::validateDn\(\) .+ integer given/
-     */
     public function test_validateDn_Invalid()
     {
         $entry = new Entry('dc=example,dc=com');
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 1 .+::validateDn\(\) .+ int(eger)? given/');
+
         $entry->validateDn(123);
     }
 
-    /**
-     * @expectedException Korowai\Component\Ldap\Exception\AttributeException
-     * @expectedExceptionMessage Entry 'dc=example,dc=com' has no attribute 'userid'
-     */
     public function test_getAttribute_Inexistent()
     {
         $entry = new Entry('dc=example,dc=com');
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\AttributeException::class);
+        $this->expectExceptionMessage("Entry 'dc=example,dc=com' has no attribute 'userid'");
+
         $entry->getAttribute('userid');
     }
 
@@ -165,33 +162,33 @@ class EntryTest extends TestCase
         $this->assertSame($final, $entry->getAttributes());
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 1 .+::setAttributes\(\) .+ string given/
-     */
     public function test_setAttributes_Invalid_1()
     {
         $entry = new Entry('dc=example,dc=com');
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 1 .+::setAttributes\(\) .+ string given/');
+
         $entry->setAttributes('userid');
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 1 .+::validateAttribute\(\) .+ integer given/
-     */
     public function test_setAttributes_Invalid_2()
     {
         $entry = new Entry('dc=example,dc=com');
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 1 .+::validateAttribute\(\) .+ int(eger)? given/');
+
         $entry->setAttributes(array('userid'));
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 2 .+::validateAttribute\(\) .+ string given/
-     */
     public function test_setAttributes_Invalid_3()
     {
         $entry = new Entry('dc=example,dc=com');
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 2 .+::validateAttribute\(\) .+ string given/');
+
         $entry->setAttributes(array('userid' => 'ptomulik'));
     }
 
@@ -202,33 +199,35 @@ class EntryTest extends TestCase
         $this->assertSame(array('userid' => array('ptomulik')), $entry->getAttributes());
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 1 .+::setAttribute\(\) .+ integer given/
-     */
     public function test_setAttribute_Invalid_1()
     {
         $entry = new Entry('dc=example,dc=com');
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 1 .+::setAttribute\(\) .+ int(eger)? given/');
+
         $entry->setAttribute(123, array('ptomulik'));
     }
 
-    /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 2 .+::setAttribute\(\) .+ integer given/
-     */
     public function test_setAttribute_Invalid_2()
     {
         $entry = new Entry('dc=example,dc=com');
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 2 .+::setAttribute\(\) .+ int(eger)? given/');
+
         $entry->setAttribute('userid', 123);
     }
 
     /**
-     * @expectedException \TypeError
-     * @expectedExceptionMessageRegExp /Argument 2 .+::setAttribute\(\) .+ string given/
      */
     public function test_setAttribute_Invalid_3()
     {
         $entry = new Entry('dc=example,dc=com');
+
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessageRegExp('/Argument 2 .+::setAttribute\(\) .+ string given/');
+
         $entry->setAttribute('userid', 'ptomulik');
     }
 

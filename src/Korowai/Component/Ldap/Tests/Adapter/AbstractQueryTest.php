@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/Adapter/AbstractQueryTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -86,12 +89,10 @@ class AbstractQueryTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     * @expectedExceptionMessage The option "scope" with value "foo" is invalid.
-     */
     public function test_scope_Invalid()
     {
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException::class);
+        $this->expectExceptionMessage('The option "scope" with value "foo" is invalid.');
         $query = $this->getAbstractQueryMock(
             array("dc=korowai,dc=org", "objectClass=*",
             array('scope' => 'foo'))
@@ -111,12 +112,10 @@ class AbstractQueryTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException \Symfony\Component\OptionsResolver\Exception\InvalidOptionsException
-     * @expectedExceptionMessage The option "deref" with value "foo" is invalid.
-     */
     public function test_deref_Invalid()
     {
+        $this->expectException(\Symfony\Component\OptionsResolver\Exception\InvalidOptionsException::class);
+        $this->expectExceptionMessage('The option "deref" with value "foo" is invalid.');
         $query = $this->getAbstractQueryMock(
             array("dc=korowai,dc=org", "objectClass=*",
             array('deref' => 'foo'))

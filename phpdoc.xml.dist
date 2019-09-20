@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<phpdocumentor>
+  <title>Korowai Framework</title>
+  <parser>
+    <target>docs/build/html/api</target>
+  </parser>
+  <transformer>
+    <target>docs/build/html/api</target>
+  </transformer>
+  <transformations>
+    <template name="responsive-twig" />
+  </transformations>
+  <files>
+    <directory>src</directory>
+    <ignore>*/Tests/*</ignore>
+  </files>
+</phpdocumentor>

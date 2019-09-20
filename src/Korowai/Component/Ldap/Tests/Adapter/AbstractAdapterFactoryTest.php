@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/Adapter/AbstractAdapterFactoryTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -73,7 +76,6 @@ class AbstractAdapterFactoryTest extends TestCase
                 ->with($this->isInstanceOf(OptionsResolver::class))
                 ->willReturnCallback(function(OptionsResolver $r) use (&$resolver) {
                     $resolver = $r;
-                    $r->setDefaults(array('options' => array()));
                 });
 
         $factory->expects($this->once())

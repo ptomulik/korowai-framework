@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/AdapterInterface.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -17,7 +20,8 @@ use Korowai\Component\Ldap\Adapter\QueryInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 /**
- * Provides access to an LDAP implementation via set of.
+ * Provides access to an LDAP implementation via set of supplementary
+ * interfaces.
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
  */

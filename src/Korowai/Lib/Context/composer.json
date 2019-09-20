@@ -1,0 +1,32 @@
+{
+    "name": "korowai/contextlib",
+    "description": "Provides functionality similar to Python's 'with' clause and contextlib",
+    "type": "library",
+    "license": "MIT",
+    "suport": {
+      "issues": "https://github.com/korowai/framework/issues",
+      "source": "https://github.com/korowai/framework"
+    },
+    "authors": [
+        {
+            "name": "Paweł Tomulik",
+            "email": "ptomulik@meil.pw.edu.pl"
+        }
+    ],
+    "require": {
+        "php": ">=7.1.3",
+        "korowai/basiclib": "self.version"
+    },
+    "autoload": {
+      "psr-4" : {
+        "Korowai\\Lib\\Context\\" : ""
+      },
+      "files" : [
+        "functions.php"
+      ],
+      "exclude-from-classmap": [
+        "/Tests/"
+      ]
+    },
+    "minimum-stability": "dev"
+}

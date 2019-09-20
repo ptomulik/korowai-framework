@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/ExtLdap/ResultReferenceIterator.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -11,71 +14,45 @@ declare(strict_types=1);
 namespace Korowai\Component\Ldap\Adapter\ExtLdap;
 
 use Korowai\Component\Ldap\Adapter\ResultReferenceIteratorInterface;
-use Korowai\Component\Ldap\Adapter\ExtLdap\Result;
-use Korowai\Component\Ldap\Adapter\ExtLdap\ResultReference;
 
 /**
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
  */
-class ResultReferenceIterator implements ResultReferenceIteratorInterface
+class ResultReferenceIterator extends AbstractResultIterator implements ResultReferenceIteratorInterface
 {
-    private $result;
-    private $reference;
-
-    public function __construct(Result $result, $reference)
+    /**
+     * Constructs ResultReferenceIterator
+     *
+     * @param Result $result                  The ldap search result which provides
+     *                                        first entry in the entry chain
+     * @param ResultReference|null $reference The current reference in the chain or
+     *                                        ``null`` to create an invalid (past the
+     *                                        end) iterator
+     *
+     * The ``$result`` object is used by ``rewind()`` method.
+     */
+    public function __construct(Result $result, ?ResultReference $reference)
     {
-        $this->result = $result;
-        $this->reference = $reference;
+        parent::__construct($result, $reference);
     }
 
-    public function getResult()
-    {
-        return $this->result;
-    }
-
+    /**
+     * Returns the ``$reference`` provided to ``__construct()`` at creation.
+     * @return mixed The ``$reference`` provided to ``__construct()`` at creation.
+     */
     public function getReference()
     {
-        return $this->reference;
+        return $this->getPointed();
     }
 
-    /**
-     * Return the current element, that is the current reference
-     */
-    public function current()
+    public function getMethodForFirst()
     {
-        return $this->reference;
+        return 'first_reference';
     }
 
-    /**
-     * Return the key of the current element, that is DN of the current reference
-     */
-    public function key()
+    protected function getMethodForNext()
     {
-        return $this->reference->getDn();
-    }
-
-    /**
-     * Move forward to next element
-     */
-    public function next()
-    {
-        $this->reference = $this->reference->next_reference();
-    }
-
-    /**
-     * Rewind the iterator to the first element
-     */
-    public function rewind()
-    {
-        $this->reference = $this->result->first_reference();
-    }
-
-    /**
-     * Checks if current position is valid
-     */
-    public function valid()
-    {
-        return ($this->reference instanceof ResultReference);
+        return 'next_reference';
     }
 }
 

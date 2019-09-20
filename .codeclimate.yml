@@ -13,11 +13,7 @@ exclude_patterns:
   - "**/Behat/"
   - "**/Resources/"
   - "**/vendor/"
-##plugins:
-##  pep8:
-##    enabled: true
-##  markdownlint:
-##    enabled: true
-##    checks:
-##      MD002:
-##        enabled: false
+  - "src/Korowai/Component/Ldap/Adapter/ExtLdap/LdapLink.php"
+plugins:
+  phpcodesniffer:
+    enabled: true

@@ -1,9 +1,13 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Ldap.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
+ * @package Korowai\Ldap
  */
 
 declare(strict_types=1);
@@ -43,17 +47,10 @@ class Ldap extends AbstractLdap
      */
     public static function createWithConfig(array $config = array(), string $factoryClass = null)
     {
-        if(!isset($factoryClass)) {
+        if (!isset($factoryClass)) {
             $factoryClass = static::$defaultAdapterFactory;
         } else {
-            if(!class_exists($factoryClass)) {
-                $msg = "Invalid argument 2 to ". __METHOD__ .": $factoryClass is not a name of existing class";
-                throw new InvalidArgumentException($msg);
-            }
-            if(!is_subclass_of($factoryClass, AdapterFactoryInterface::class)) {
-                $msg = "Invalid argument 2 to ". __METHOD__ .": $factoryClass is not an implementation of ". AdapterFactoryInterface::class;
-                throw new InvalidArgumentException($msg);
-            }
+            static::checkFactoryClassArg($factoryClass, __METHOD__, 2);
         }
         $factory = new $factoryClass();
         $factory->configure($config);
@@ -163,6 +160,19 @@ class Ldap extends AbstractLdap
     public function createQuery(string $base_dn, string $filter, array $options = array()) : QueryInterface
     {
         return $this->getAdapter()->createQuery($base_dn, $filter, $options);
+    }
+
+    protected static function checkFactoryClassArg($factoryClass, $method, $argno)
+    {
+        $msg_pre = "Invalid argument $argno to $method";
+        if (!class_exists($factoryClass)) {
+            $msg = $msg_pre . ": $factoryClass is not a name of existing class";
+            throw new InvalidArgumentException($msg);
+        }
+        if (!is_subclass_of($factoryClass, AdapterFactoryInterface::class)) {
+            $msg = $msg_pre . ": $factoryClass is not an implementation of ". AdapterFactoryInterface::class;
+            throw new InvalidArgumentException($msg);
+        }
     }
 }
 

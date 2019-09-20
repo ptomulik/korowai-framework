@@ -14,8 +14,10 @@
         }
     ],
     "require": {
-        "php": ">=7.0",
-        "symfony/options-resolver": ">=3.3"
+        "php": ">=7.1.3",
+        "symfony/options-resolver": ">=4.2",
+        "korowai/errorlib": "self.version",
+        "korowai/contextlib": "self.version"
     },
     "autoload": {
       "psr-4" : {

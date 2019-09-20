@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/ExtLdap/EnsureLdapLink.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -28,7 +31,7 @@ trait EnsureLdapLink
      */
     protected static function ensureLdapLink(LdapLink $link) : bool
     {
-        if(!$link->isValid()) {
+        if (!$link->isValid()) {
             throw new LdapException("Uninitialized LDAP link", -1);
         }
         return true;

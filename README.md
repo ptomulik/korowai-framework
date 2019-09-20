@@ -1,7 +1,9 @@
 # Korowai Framework
 
 [![Build Status](https://travis-ci.org/korowai/framework.svg?branch=master)](https://travis-ci.org/korowai/framework)
-[![Coverage Status](https://coveralls.io/repos/github/korowai/framework/badge.svg?branch=devel)](https://coveralls.io/github/korowai/framework?branch=devel)
+[![codecov](https://codecov.io/gh/korowai/framework/branch/master/graph/badge.svg)](https://codecov.io/gh/korowai/framework)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e022fc1ea75dbbe42966/maintainability)](https://codeclimate.com/github/korowai/framework/maintainability)
+[![Documentation Status](https://readthedocs.org/projects/korowai-framework/badge/?version=latest)](https://korowai-framework.readthedocs.io/en/latest/?badge=latest)
 
 Open Source software for exploring LDAP directories.
 
@@ -19,11 +21,11 @@ LDAP database, which has tree structure.
 
 ### Runtime Requirements
 
-PHP>=7.0 is required. In addition to PHP, you may need to install these
+PHP>=7.1.3 is required. In addition to PHP, you may need to install these
 packages
 
 ```shell
-apt-get install php-xml php-mbstring
+apt-get install php-ldap php-xml php-mbstring
 ```
 
 ## Notes for developers
@@ -37,21 +39,59 @@ apt-get install php-xml php-mbstring
 After you've just cloned
 
 ```shell
-./bootstrap-dev && ./composer install
+php bootstrap-dev && php composer install
 ```
 
+### Running unit tests
+
+```shell
+php vendor/bin/phpunit
+```
 
 ### Running integration tests
 
 ```shell
-./docker-componse run --rm php-cli vendor/bin/behat
+./docker-compose run --rm php-cli vendor/bin/behat
 ./docker-compose down
 ```
 
-### Generating api documentation
+### Running interactive PHP shell
 
 ```shell
-./sami update sami-local.conf.php
+./docker-compose run --rm php-cli vendor/bin/psysh
 ```
 
-The generated API docs go to ``build/docks/api/build/local/``.
+### Running CodeClimate
+
+```shell
+./docker-compose -f docker-compose.codeclimate.yml run --rm codeclimate analyze
+./docker-compose -f docker-compose.codeclimate.yml down
+```
+
+### Generating API documentation
+
+```shell
+./docker-compose -f docs/docker-compose.yml run --rm sami build
+./docker-compose -f docs/docker-compose.yml down
+```
+
+The generated API docs go to ``docs/build/html/api/``.
+
+### Generating API documentation continuously and serving via HTTP
+
+```shell
+./docker-compose -f docs/docker-compose.yml up sami
+./docker-compose -f docs/docker-compose.yml down
+```
+
+The generated API docs go to ``docs/build/html/api/`` and get exposed at
+
+  - ``https://localhost:8001``.
+
+### Generating sphinx documentation continuously
+
+TODO:
+
+The generated docs go to ``docs/build/html`` and get exposed at
+
+  - ``http://localhost:8000``.

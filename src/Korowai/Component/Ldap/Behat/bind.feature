@@ -11,7 +11,7 @@ Feature: Simple bind
       | "ldap://ldap-service" | "cn=admin,dc=example,dc=org" | "admin"   |
 
   Scenario Outline: Successful bind using config, binddn and password
-    Given I am connected using JSON config <config>
+    Given I am connected using config <config>
     When I bind with binddn <binddn> and password <password>
     Then I should see no exception
     And I should be bound
@@ -34,7 +34,7 @@ Feature: Simple bind
 
   Scenario Outline: LDAP link creation failure
     Given I am disconnected
-    When I create ldap link with JSON config <config>
+    When I create ldap link with config <config>
     Then I should see ldap exception with message "ldap_connect(): Could not create session handle: Bad parameter to an ldap routine"
     And I should have no valid LDAP link
 
@@ -43,7 +43,7 @@ Feature: Simple bind
       | '{"uri":"foop://invalid-uri"}' |
 
   Scenario Outline: Unsuccessful bind because of connection problems
-    Given I am connected using JSON config <config>
+    Given I am connected using config <config>
     When I bind with binddn <binddn> and password <password>
     Then I should see ldap exception with message "Can't contact LDAP server"
     And I should have a valid ldap link

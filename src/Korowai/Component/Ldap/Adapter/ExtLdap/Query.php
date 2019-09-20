@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/ExtLdap/Query.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -14,8 +17,10 @@ use Korowai\Component\Ldap\Adapter\AbstractQuery;
 use Korowai\Component\Ldap\Adapter\ExtLdap\LdapLink;
 use Korowai\Component\Ldap\Adapter\ExtLdap\Result;
 use Korowai\Component\Ldap\Adapter\ResultInterface;
-use Korowai\Component\Ldap\Adapter\CallWithEmptyErrorHandler;
 use Korowai\Component\Ldap\Adapter\ExtLdap\LastLdapException;
+
+use function Korowai\Lib\Context\with;
+use Korowai\Lib\Error\EmptyErrorHandler;
 
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\Options;
@@ -26,7 +31,6 @@ use Symfony\Component\OptionsResolver\Options;
 class Query extends AbstractQuery
 {
     use EnsureLdapLink;
-    use CallWithEmptyErrorHandler;
     use LastLdapException;
 
     /** @var LdapLink */
@@ -53,7 +57,7 @@ class Query extends AbstractQuery
 
     protected static function getDerefOption(array $options)
     {
-        if(isset($options['deref'])) {
+        if (isset($options['deref'])) {
             return constant('LDAP_DEREF_' . strtoupper($options['deref']));
         } else {
             return LDAP_DEREF_NEVER;
@@ -67,7 +71,7 @@ class Query extends AbstractQuery
     {
         $options = $this->getOptions();
         $scope = strtolower(isset($options['scope']) ? $options['scope'] : 'sub');
-        switch($scope) {
+        switch ($scope) {
             case 'base':
                 $func = 'read';
                 break;
@@ -83,13 +87,16 @@ class Query extends AbstractQuery
         }
 
         static::ensureLdapLink($this->link);
-        return $this->callWithEmptyErrorHandler('doExecuteQueryImpl', $func);
+        return with(EmptyErrorHandler::getInstance())(function ($eh) use ($func) {
+            return $this->doExecuteQueryImpl($func);
+        });
     }
 
     private function doExecuteQueryImpl($func)
     {
         $options = $this->getOptions();
-        $result = call_user_func(array($this->link, $func),
+        $result = call_user_func(
+            array($this->link, $func),
             $this->base_dn,
             $this->filter,
             $options['attributes'],
@@ -98,7 +105,7 @@ class Query extends AbstractQuery
             $options['timeLimit'],
             static::getDerefOption($options)
         );
-        if(false === $result) {
+        if (false === $result) {
             throw static::lastLdapException($this->link);
         }
         return $result;

@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/ExtLdap/LdapLinkOptions.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -64,7 +67,7 @@ trait LdapLinkOptions
      */
     public function getLdapLinkOptionConstantName($optionName)
     {
-        if(!isset(self::$ldapLinkOptionDeclarations[$optionName]['constant'])) {
+        if (!isset(self::$ldapLinkOptionDeclarations[$optionName]['constant'])) {
             return null;
         }
         $name = self::$ldapLinkOptionDeclarations[$optionName]['constant'];
@@ -81,7 +84,7 @@ trait LdapLinkOptions
     {
         $constantName = $this->getLdapLinkOptionConstantName($name);
 
-        if(!$constantName) {
+        if (!$constantName) {
             throw new LdapException("Unknown option '$name'", -1);
         }
 
@@ -95,7 +98,7 @@ trait LdapLinkOptions
     public function getLdapLinkOptionDeclarations()
     {
         static $existingOptions;
-        if(!isset($existingOptions)) {
+        if (!isset($existingOptions)) {
             $existingOptions = array_filter(
                 self::$ldapLinkOptionDeclarations,
                 [$this, 'getLdapLinkOptionConstantName'],
@@ -111,8 +114,8 @@ trait LdapLinkOptions
     protected function configureLdapLinkOptions(OptionsResolver $resolver)
     {
         $ldapLinkOptionDeclarations = $this->getLdapLinkOptionDeclarations();
-        foreach($ldapLinkOptionDeclarations as $name => $option) {
-            if(array_key_exists('default', $option)) {
+        foreach ($ldapLinkOptionDeclarations as $name => $option) {
+            if (array_key_exists('default', $option)) {
                 $resolver->setDefault($name, $option['default']);
             } else {
                 $resolver->setDefined($name);

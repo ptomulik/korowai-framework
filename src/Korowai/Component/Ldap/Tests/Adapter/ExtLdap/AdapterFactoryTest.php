@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/Adapter/ExtLdap/AdapterFactoryTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -29,9 +32,6 @@ class AdapterFactoryTest extends TestCase
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionMessage The LDAP PHP extension is not enabled
-     * @expectedExceptionCode -1
      */
     public function test_construct_ExtLdapNotLoaded()
     {
@@ -39,16 +39,15 @@ class AdapterFactoryTest extends TestCase
              ->expects($this->once())
              ->with('ldap')
              ->willReturn(false);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionMessage('The LDAP PHP extension is not enabled');
+        $this->expectExceptionCode(-1);
+
         new AdapterFactory();
     }
 
 
-    /**
-     * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionMessage Error message
-     * @expectedExceptionCode -1
-     */
     public function test_createAdapter_ConnectFailure_1()
     {
         $this->getLdapFunctionMock("ldap_connect")
@@ -65,14 +64,16 @@ class AdapterFactoryTest extends TestCase
 
         $factory = new AdapterFactory;
         $factory->configure(array());
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionMessage('Error message');
+        $this->expectExceptionCode(-1);
+
         $factory->createAdapter();
     }
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionMessage Failed to create LDAP connection
-     * @expectedExceptionCode -1
      */
     public function test_createAdapter_ConnectFailure_2()
     {
@@ -86,14 +87,16 @@ class AdapterFactoryTest extends TestCase
 
         $factory = new AdapterFactory;
         $factory->configure(array());
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionMessage('Failed to create LDAP connection');
+        $this->expectExceptionCode(-1);
+
         $factory->createAdapter();
     }
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionMessage Error message
-     * @expectedExceptionCode 123
      */
     public function test_createAdapter_SetOptionFailure()
     {
@@ -120,6 +123,11 @@ class AdapterFactoryTest extends TestCase
 
         $factory = new AdapterFactory;
         $factory->configure(array());
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionMessage('Error message');
+        $this->expectExceptionCode(123);
+
         $factory->createAdapter();
     }
 

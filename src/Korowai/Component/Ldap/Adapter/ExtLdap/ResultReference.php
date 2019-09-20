@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/ExtLdap/ResultReference.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -23,6 +26,9 @@ use Korowai\Component\Ldap\Adapter\ExtLdap\ResultAttributeIterator;
  */
 class ResultReference extends ResultEntry implements ResultReferenceInterface
 {
+    // @codingStandardsIgnoreStart
+    // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName
+
     /**
      * Get next result reference
      *
@@ -43,12 +49,15 @@ class ResultReference extends ResultEntry implements ResultReferenceInterface
         return $this->getResult()->getLink()->parse_reference($this, $referrals);
     }
 
+    // phpcs:enable Generic.NamingConventions.CamelCapsFunctionName
+    // @codingStandardsIgnoreEnd
+
     /**
      * {@inheritdoc}
      */
     public function getReferrals()
     {
-        if(!$this->parse_reference($referrals)) {
+        if (!$this->parse_reference($referrals)) {
             return false;
         }
         return $referrals;

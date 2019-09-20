@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/Adapter/ExtLdap/LdapLinkOptionsTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -137,14 +140,13 @@ class LdapLinkOptionsTest extends TestCase
         }
     }
 
-    /**
-     * @expectedException Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionMessage Unknown option 'inexistent'
-     * @expectedExceptionCode -1
-     */
     public function test_getOptionConstant_Inexistend()
     {
         $no = new ClassWithLdapLinkOptions();
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionMessage("Unknown option 'inexistent'");
+        $this->expectExceptionCode(-1);
         $no->getLdapLinkOptionConstant('inexistent');
     }
 

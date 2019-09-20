@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/Adapter/ExtLdap/BindingTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -85,15 +88,15 @@ class BindingTest extends TestCase
         $this->assertSame(-1, $c->errno());
     }
 
-    /**
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode -1
-     * @expectedExceptionMessage Uninitialized LDAP link
-     */
     public function test_bind_Uninitialized_1()
     {
         $link = $this->createLdapLinkMock(false);
         $c = new Binding($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(-1);
+        $this->expectExceptionMessage('Uninitialized LDAP link');
+
         $c->bind();
     }
 
@@ -149,9 +152,6 @@ class BindingTest extends TestCase
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode 2
-     * @expectedExceptionMessage Error message
      */
     public function test_bind_Failure_1()
     {
@@ -171,6 +171,11 @@ class BindingTest extends TestCase
              ->willReturn('Error message');
 
         $c = new Binding($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(2);
+        $this->expectExceptionMessage('Error message');
+
         $c->bind();
     }
 
@@ -202,11 +207,6 @@ class BindingTest extends TestCase
         $this->assertFalse($c->isBound());
     }
 
-    /**
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode -1
-     * @expectedExceptionMessage Uninitialized LDAP link
-     */
     public function test_getOption_Uninitialized()
     {
         $link = $this->createLdapLinkMock(false);
@@ -214,14 +214,16 @@ class BindingTest extends TestCase
              ->method('get_option');
 
         $c = new Binding($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(-1);
+        $this->expectExceptionMessage('Uninitialized LDAP link');
+
         $c->getOption(0);
     }
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode 2
-     * @expectedExceptionMessage Error message
      */
     public function test_getOption_Failure()
     {
@@ -241,6 +243,11 @@ class BindingTest extends TestCase
                 ->willReturn('Error message');
 
         $c = new Binding($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(2);
+        $this->expectExceptionMessage('Error message');
+
         $c->getOption(0);
     }
 
@@ -266,11 +273,6 @@ class BindingTest extends TestCase
         Phake::verify($link, Phake::times(1))->get_option(0, Phake::ignoreRemaining());
     }
 
-    /**
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode -1
-     * @expectedExceptionMessage Uninitialized LDAP link
-     */
     public function test_setOption_Uninitialized()
     {
         $link = $this->createLdapLinkMock(false);
@@ -278,14 +280,16 @@ class BindingTest extends TestCase
              ->method('set_option');
 
         $c = new Binding($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(-1);
+        $this->expectExceptionMessage('Uninitialized LDAP link');
+
         $c->setOption(0, 'option zero');
     }
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode 2
-     * @expectedExceptionMessage Error message
      */
     public function test_setOption_Failure()
     {
@@ -302,6 +306,11 @@ class BindingTest extends TestCase
              ->willReturn('Error message');
 
         $c = new Binding($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(2);
+        $this->expectExceptionMessage('Error message');
+
         $c->setOption(0, 'option zero');
     }
 
@@ -341,15 +350,15 @@ class BindingTest extends TestCase
         $this->assertFalse($c->isBound());
     }
 
-    /**
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode -1
-     * @expectedExceptionMessage Uninitialized LDAP link
-     */
     public function test_unbind_Uninitialized_1()
     {
         $link = $this->createLdapLinkMock(false);
         $c = new Binding($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(-1);
+        $this->expectExceptionMessage('Uninitialized LDAP link');
+
         $c->unbind();
     }
 
@@ -366,9 +375,6 @@ class BindingTest extends TestCase
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode 2
-     * @expectedExceptionMessage Error message
      */
     public function test_unbind_Failure_1()
     {
@@ -384,6 +390,11 @@ class BindingTest extends TestCase
              ->willReturn('Error message');
 
         $c = new Binding($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(2);
+        $this->expectExceptionMessage('Error message');
+
         $c->unbind();
     }
 

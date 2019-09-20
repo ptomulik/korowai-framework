@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/Adapter/ExtLdap/EntryManagerTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -69,11 +72,6 @@ class EntryManagerTest extends TestCase
         $this->assertNull($mngr->add($entry));
     }
 
-    /**
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode -1
-     * @expectedExceptionMessage Uninitialized LDAP link
-     */
     public function test_add_UninitializedLink()
     {
         $attributes = array('attr1' => array('attr1val1'));
@@ -84,14 +82,16 @@ class EntryManagerTest extends TestCase
              ->method('add');
 
         $mngr = new EntryManager($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(-1);
+        $this->expectExceptionMessage('Uninitialized LDAP link');
+
         $mngr->add($entry);
     }
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode 2
-     * @expectedExceptionMessage Error message
      */
     public function test_add_Failure()
     {
@@ -112,6 +112,11 @@ class EntryManagerTest extends TestCase
              ->willReturn("Error message");
 
         $mngr = new EntryManager($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(2);
+        $this->expectExceptionMessage('Error message');
+
         $mngr->add($entry);
     }
 
@@ -130,11 +135,6 @@ class EntryManagerTest extends TestCase
         $this->assertNull($mngr->update($entry));
     }
 
-    /**
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode -1
-     * @expectedExceptionMessage Uninitialized LDAP link
-     */
     public function test_update_Invalid()
     {
         $attributes = array('attr1' => array('attr1val1'));
@@ -145,14 +145,16 @@ class EntryManagerTest extends TestCase
              ->method('modify');
 
         $mngr = new EntryManager($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(-1);
+        $this->expectExceptionMessage('Uninitialized LDAP link');
+
         $mngr->update($entry);
     }
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode 2
-     * @expectedExceptionMessage Error message
      */
     public function test_update_Failure()
     {
@@ -173,6 +175,11 @@ class EntryManagerTest extends TestCase
              ->willReturn("Error message");
 
         $mngr = new EntryManager($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(2);
+        $this->expectExceptionMessage('Error message');
+
         $mngr->update($entry);
     }
 
@@ -218,11 +225,6 @@ class EntryManagerTest extends TestCase
         $this->assertNull($mngr->rename($entry,'cn=korowai', false));
     }
 
-    /**
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode -1
-     * @expectedExceptionMessage Uninitialized LDAP link
-     */
     public function test_rename_Invalid()
     {
         $entry = new Entry('dc=korowai,dc=org');
@@ -232,14 +234,16 @@ class EntryManagerTest extends TestCase
              ->method('rename');
 
         $mngr = new EntryManager($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(-1);
+        $this->expectExceptionMessage('Uninitialized LDAP link');
+
         $mngr->rename($entry,'cn=korowai', true);
     }
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode 2
-     * @expectedExceptionMessage Error message
      */
     public function test_rename_Failure()
     {
@@ -259,6 +263,11 @@ class EntryManagerTest extends TestCase
              ->willReturn("Error message");
 
         $mngr = new EntryManager($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(2);
+        $this->expectExceptionMessage('Error message');
+
         $mngr->rename($entry,'cn=korowai', true);
     }
 
@@ -276,11 +285,6 @@ class EntryManagerTest extends TestCase
         $this->assertNull($mngr->delete($entry));
     }
 
-    /**
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode -1
-     * @expectedExceptionMessage Uninitialized LDAP link
-     */
     public function test_delete_Invalid()
     {
         $entry = new Entry('dc=korowai,dc=org');
@@ -290,14 +294,16 @@ class EntryManagerTest extends TestCase
              ->method('delete');
 
         $mngr = new EntryManager($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(-1);
+        $this->expectExceptionMessage('Uninitialized LDAP link');
+
         $mngr->delete($entry);
     }
 
     /**
      * @runInSeparateProcess
-     * @expectedException \Korowai\Component\Ldap\Exception\LdapException
-     * @expectedExceptionCode 2
-     * @expectedExceptionMessage Error message
      */
     public function test_delete_Failure()
     {
@@ -317,6 +323,11 @@ class EntryManagerTest extends TestCase
              ->willReturn("Error message");
 
         $mngr = new EntryManager($link);
+
+        $this->expectException(\Korowai\Component\Ldap\Exception\LdapException::class);
+        $this->expectExceptionCode(2);
+        $this->expectExceptionMessage('Error message');
+
         $mngr->delete($entry);
     }
 }

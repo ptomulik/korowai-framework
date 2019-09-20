@@ -26,6 +26,14 @@ roomNumber: 114
 telephoneNumber: +12 34 567 8908
 userPassword: secret
 
+# always empty subtree
+dn: dc=empty,dc=example,dc=org
+objectClass: top
+objectClass: dcObject
+objectClass: organization
+dc: empty
+o: Empty, Example Org.
+
 # subtree
 dn: dc=subtree,dc=example,dc=org
 objectClass: top

@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Tests/Exception/LdapExceptionTest.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -20,7 +23,7 @@ class LdapExceptionTest extends TestCase
 {
     public function testBaseClass()
     {
-        $this->assertInstanceOf(\RuntimeException::class, new LdapException());
+        $this->assertInstanceOf(\ErrorException::class, new LdapException());
     }
 
     public function test_getMessage()

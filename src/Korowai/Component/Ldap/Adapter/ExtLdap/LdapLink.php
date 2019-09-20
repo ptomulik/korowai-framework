@@ -1,8 +1,11 @@
 <?php
 /**
+ * @file src/Korowai/Component/Ldap/Adapter/ExtLdap/LdapLink.php
+ *
  * This file is part of the Korowai package
  *
  * @author Paweł Tomulik <ptomulik@meil.pw.edu.pl>
+ * @package Korowai\Ldap
  * @license Distributed under MIT license.
  */
 
@@ -55,7 +58,7 @@ class LdapLink
      */
     public function __destruct()
     {
-        if($this->isValid()) {
+        if ($this->isValid()) {
             $this->unbind();
         }
     }
@@ -78,6 +81,9 @@ class LdapLink
     {
         return static::isLdapLinkResource($this->link);
     }
+
+    // @codingStandardsIgnoreStart
+    // phpcs:disable Generic.NamingConventions.CamelCapsFunctionName
 
     /**
      * Add entries to LDAP directory
@@ -158,6 +164,7 @@ class LdapLink
      * Send LDAP pagination control
      *
      * @param int $pagesize
+     * @param mixed $tail remaining arguments passed to ldap_control_paged_result().
      *
      * @link http://php.net/manual/en/function.ldap-control-paged-result.php ldap_control_paged_result()
      */
@@ -210,7 +217,7 @@ class LdapLink
      *
      * @link http://php.net/manual/en/function.ldap-dn2ufn.php ldap_dn2ufn()
      */
-    static public function dn2ufn($dn)
+    public static function dn2ufn($dn)
     {
         return @ldap_dn2ufn($dn);
     }
@@ -222,7 +229,7 @@ class LdapLink
      *
      * @link http://php.net/manual/en/function.ldap-err2str.php ldap_err2str()
      */
-    static public function err2str($errno)
+    public static function err2str($errno)
     {
         return @ldap_err2str($errno);
     }
@@ -251,12 +258,13 @@ class LdapLink
      * Escape a string for use in an LDAP filter or DN
      *
      * @param string $value
+     * @param mixed $tail remaining arguments passed to ldap_escape()
      *
      * @link http://php.net/manual/en/function.ldap-escape.php ldap_escape()
      */
-    static public function escape($value, ...$tail)
+    public static function escape($value, ...$tail)
     {
-        return @ldap_escape($value,...$tail);
+        return @ldap_escape($value, ...$tail);
     }
 
     /**
@@ -267,7 +275,7 @@ class LdapLink
      *
      * @link http://php.net/manual/en/function.ldap-explode-dn.php ldap_explode_dn()
      */
-    static public function explode_dn($dn, $with_attrib)
+    public static function explode_dn($dn, $with_attrib)
     {
         return @ldap_explode_dn($dn, $with_attrib);
     }
@@ -317,7 +325,7 @@ class LdapLink
      *
      * @link http://php.net/manual/en/function.ldap-free-result.php ldap_free_result()
      */
-    static public function free_result(Result $result)
+    public static function free_result(Result $result)
     {
         return @ldap_free_result($result->getResource());
     }
@@ -399,6 +407,7 @@ class LdapLink
      *
      * @param string $base_dn
      * @param string $filter
+     * @param mixed $tail remaining arguments passed to ldap_list()
      *
      * @link http://php.net/manual/en/function.ldap-list.php ldap_list()
      */
@@ -529,6 +538,7 @@ class LdapLink
      *
      * @param Result $result
      * @param int &$errcode
+     * @param mixed $tail remaining arguments passed to ldap_parse_result()
      *
      * @link http://php.net/manual/en/function.ldap-parse-result.php ldap_parse_result()
      */
@@ -542,6 +552,7 @@ class LdapLink
      *
      * @param string $base_dn
      * @param string $filter
+     * @param mixed $tail remaining arguments passed to ldap_read()
      *
      * @link http://php.net/manual/en/function.ldap-read.php ldap_read()
      */
@@ -581,6 +592,7 @@ class LdapLink
      *
      * @param string $base_dn
      * @param string $filter
+     * @param mixed $tail remaining arguments passed to ldap_search()
      *
      * @link http://php.net/manual/en/function.ldap-search.php ldap_search()
      */
@@ -647,6 +659,9 @@ class LdapLink
     {
         return @ldap_unbind($this->link);
     }
+
+    // phpcs:enable Generic.NamingConventions.CamelCapsFunctionName
+    // @codingStandardsIgnoreEnd
 }
 
 // vim: syntax=php sw=4 ts=4 et:

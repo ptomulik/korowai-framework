@@ -3,6 +3,19 @@
 
 class BootstrapError extends \Exception { }
 
+trait SingletonSupport
+{
+  private static $_instance = null;
+
+  public static function instance(...$args)
+  {
+    if(!is_object(self::$_instance)) {
+      self::$_instance = new self(...$args);
+    }
+    return self::$_instance;
+  }
+}
+
 abstract class AbstractInstaller {
 
   protected $install_dir;
@@ -159,12 +172,12 @@ abstract class AbstractInstaller {
 
 class ComposerInstaller extends AbstractInstaller
 {
+  use SingletonSupport;
+
   protected function defaultUrl() { return 'https://getcomposer.org/installer'; }
   protected function defaultSigUrl() { return 'https://composer.github.io/installer.sig'; }
   protected function defaultFileName() { return 'composer'; }
   protected function tmpFileNamePrefix() { return 'composer-setup-'; }
-
-  private static $_instance = null;
 
   protected function runInstallCmd()
   {
@@ -174,24 +187,16 @@ class ComposerInstaller extends AbstractInstaller
 
       system($cmd);
   }
-
-  public static function instance(...$args)
-  {
-    if(!is_object(self::$_instance)) {
-      self::$_instance = new self(...$args);
-    }
-    return self::$_instance;
-  }
 }
 
-class SamiInstaller extends AbstractInstaller
+class PhpDocInstaller extends AbstractInstaller
 {
-  protected function defaultUrl() { return 'http://get.sensiolabs.org/sami.phar'; }
-  protected function defaultSigUrl() { return null; }
-  protected function defaultFileName() { return 'sami'; }
-  protected function tmpFileNamePrefix() { return 'sami-'; }
+  use SingletonSupport;
 
-  private static $_instance = null;
+  protected function defaultUrl() { return 'https://github.com/phpDocumentor/phpDocumentor2/releases/latest/download/phpDocumentor.phar'; }
+  protected function defaultSigUrl() { return null; }
+  protected function defaultFileName() { return 'phpdoc'; }
+  protected function tmpFileNamePrefix() { return 'phpdoc-'; }
 
   protected function runInstallCmd()
   {
@@ -205,20 +210,14 @@ class SamiInstaller extends AbstractInstaller
       throw new BootstrapError($msg);
     }
   }
-
-  public static function instance(...$args)
-  {
-    if(!is_object(self::$_instance)) {
-      self::$_instance = new self(...$args);
-    }
-    return self::$_instance;
-  }
 }
 
 class DockerComposerInstaller extends AbstractInstaller
 {
+  use SingletonSupport;
+
   protected function defaultUrl() {
-    $release = '1.17.0';
+    $release = '1.23.0';
     $fname = 'docker-compose-' . self::system(). '-' . self::machine();
     if('win' === strtolower(substr(self::system(),0,3))) {
       $fname = $fname . '.exe';
@@ -235,8 +234,6 @@ class DockerComposerInstaller extends AbstractInstaller
   }
   protected function tmpFileNamePrefix() { return 'docker-compose-'; }
 
-  private static $_instance = null;
-
   protected function runInstallCmd()
   {
     $destfile = implode(DIRECTORY_SEPARATOR, array($this->install_dir, $this->filename));
@@ -249,26 +246,45 @@ class DockerComposerInstaller extends AbstractInstaller
       throw new BootstrapError($msg);
     }
   }
-
-  public static function instance(...$args)
-  {
-    if(!is_object(self::$_instance)) {
-      self::$_instance = new self(...$args);
-    }
-    return self::$_instance;
-  }
 }
 
 
+function updateDotEnvFile()
+{
+  $dotenv = __DIR__.'/.env';
+  if(file_exists($dotenv)) {
+    fprintf(STDERR, "info: %s\n", "file $dotenv already exists, skipping creation");
+    return false;
+  }
+
+  $dist = __DIR__.'/.env.dist';
+
+  $uid = (string)getmyuid();
+  $gid = (string)getmygid();
+
+  $content = file_get_contents($dist);
+  $content = preg_replace('/@UID@/', $uid, $content);
+  $content = preg_replace('/@GID@/', $gid, $content);
+
+  file_put_contents($dotenv, $content);
+
+  return true;
+}
+
 try {
 
-  ComposerInstaller::instance()->install();
-  SamiInstaller::instance()->install();
-  DockerComposerInstaller::instance()->install();
+  $opts = getopt('', ['no-install']);
+
+  if (!isset($opts['no-install'])) {
+    ComposerInstaller::instance()->install();
+    PhpDocInstaller::instance()->install();
+    DockerComposerInstaller::instance()->install();
+  }
+  updateDotEnvFile();
 
 } catch(BootstrapError $e) {
 
-  error_log($e->getMessage());
+  fprintf(STDERR, "error: %s\n", $e->getMessage());
   exit(1);
 
 }
